@@ -3,14 +3,19 @@ from multiprocessing import Pool
 from multiprocessing.dummy import Pool as ThreadPool
 from grab import Grab
 import urllib.request
+import shutil
 
 def download():
+    url=input('url:')
+    print('ddd')
     pool = ThreadPool(4)
-    url='http://novel18.syosetu.com/n3746ce/'
     main_page=Grab()
     main_page.go(url)
     title=main_page.doc('//*[@id="novel_color"]/p').text()
-    path='%s/' %title
+    if os.path.isdir('temp'):
+       shutil.rmtree('temp')
+    os.mkdir('temp')
+    path='temp/'
     main_page.doc.save(path+'main.html')
     urls_xpath = main_page.doc('//*[@id="novel_color"]/div/dl/dd/a')
     i=1
@@ -34,4 +39,7 @@ def download():
 
 
 if __name__ == '__main__':
+
     download()
+    import buildEPUB
+    buildEPUB
